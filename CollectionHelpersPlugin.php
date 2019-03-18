@@ -43,6 +43,22 @@ class CollectionHelpersPlugin extends Omeka_Plugin_AbstractPlugin
         return '<span class="citation-url">'.html_escape(record_url($item, null, true)).'</span>';
     }
 
+    public function stripCreatorLinks($creator) 
+    {
+        if ($creator) {
+            return "<span>" . strip_tags($creator) . "</span>";
+        }
+    }
+
+    public function getCreators($item) 
+    {
+        $creators = metadata($item, ['Dublin Core', 'Creator'], ['all' => true]);
+        if (count($creators) > 0) {
+            return implode(', ', array_map("CollectionHelpersPlugin::stripCreatorLinks", $creators));
+        }
+        return NULL;
+    }
+
     public static function formatCitation($val) {
         if ($val === NULL) {
             return false;
@@ -60,7 +76,7 @@ class CollectionHelpersPlugin extends Omeka_Plugin_AbstractPlugin
         $item = $args['item'];
         $elements = item_type_elements($item);
         $_citation = [];
-        $_citation[0] = metadata($item, ['Dublin Core', 'Creator']);
+        $_citation[0] = $this->getCreators($item);
         $_citation[2] = '"' . metadata($item, ['Dublin Core', 'Title']) . '."';
         $_citation[3] = $this->getCollection($item);
         $_citation[4] = $this->getSiteTitle();
