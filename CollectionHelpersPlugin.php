@@ -61,8 +61,7 @@ class CollectionHelpersPlugin extends Omeka_Plugin_AbstractPlugin
         $elements = item_type_elements($item);
         $_citation = [];
         $_citation[0] = metadata($item, ['Dublin Core', 'Creator']);
-        $_citation[1] = metadata($item, ['Dublin Core', 'Date']);
-        $_citation[2] = metadata($item, ['Dublin Core', 'Title']);
+        $_citation[2] = '"' . metadata($item, ['Dublin Core', 'Title']) . '."';
         $_citation[3] = $this->getCollection($item);
         $_citation[4] = $this->getSiteTitle();
         $_citation[5] = $this->getAccessed();
